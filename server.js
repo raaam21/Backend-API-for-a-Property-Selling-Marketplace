@@ -16,12 +16,22 @@ app.post('/add',addProperty);
 
 app.get('/',getProperty);
 
-app.patch('/update',(req,res)=>{
+app.delete('/:id',deleteProperty);
+
+app.patch('/:id',async(req,res)=>{
     console.log('Updating property');
-    res.status(200);
+    const updatedProperty = await pModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new:true}
+    );
+    res.status(200).json(updatedProperty);
+
+
+    // res.status(200);
 });
 
-app.delete('/:id',deleteProperty);
+
 
 app.listen(port,()=>{
     console.log('Server Up!');
