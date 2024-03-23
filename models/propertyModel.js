@@ -1,13 +1,8 @@
-import mongoose from "mongoose";
-
+const mongoose = require("mongoose");
 const propertyModel = mongoose.Schema({
-    pId:{
-        type:mongoose.Schema.ObjectId,
-        required:true,
-    },
     location:{
         type:String,
-        required:[true,"Add "]
+        required:[true,"Add loc"]
     },
     noRooms:{
         type:Number,
@@ -29,4 +24,4 @@ const propertyModel = mongoose.Schema({
     timestamps : true,
 });
 
-module.exports = mongoose.model("Property",propertyModel)
+module.exports = mongoose.model('pModel',propertyModel);

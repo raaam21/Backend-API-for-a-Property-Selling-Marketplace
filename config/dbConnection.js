@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+
+const mongoose = require("mongoose");
 const CONNECTION_STRING = 'mongodb+srv://yoursram18:xYBNAhtNBmjMIbQZ@cluster0.vi9bia2.mongodb.net/'
 const connectDb = async()=>{
     try{
@@ -15,4 +16,4 @@ const connectDb = async()=>{
     }
 };
 
-export default connectDb;
+module.exports = connectDb;

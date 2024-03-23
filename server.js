@@ -1,26 +1,36 @@
-import express from 'express';
-// import propertyModel from './models';
-import connectDb from './config/dbConnection.js';
+
+const express = require("express");
+const pModel = require("./models/propertyModel.js");
+const connectDb = require("./config/dbConnection.js");
+const asyncHandler = require("express-async-handler");
+
 
 const app = express();
 const port = 5000;
 connectDb();
 
+app.use(express.json());
 
-app.post('/add',(req,res)=>{
+app.post('/add',asyncHandler(async(req,res)=>{
     console.log('Adding property');
 
-    const {cost,owner,pStatus,noRooms} = req.body;
-    if (!cost || !owner || !pStatus || !noRooms){
+    const {cost,owner,pStatus,noRooms,location} = req.body;
+    if (!cost || !owner || !pStatus || !noRooms || !location){
         res.status(400);
-
         throw new Error('All Fields Req.');
     }
 
-    res.status(200);
+    const propModel = await pModel.create({
+        cost,
+        owner,
+        pStatus,
+        noRooms,
+        location
+    });
 
-
-});
+    console.log(propModel);
+    res.status(200).json({propModel});
+}));
 
 app.get('/',(req,res)=>{
     console.log('All property');
