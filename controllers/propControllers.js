@@ -47,4 +47,13 @@ const deleteProperty = asyncHandler(async(req,res)=>{
 });
 
 
-module.exports = {addProperty,getProperty,deleteProperty};
+const updateProperty = asyncHandler(async(req,res)=>{
+    console.log('Updating property');
+    const updatedProperty = await pModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new:true}
+    );
+    res.status(200).json(updatedProperty);
+});
+module.exports = {addProperty,getProperty,deleteProperty,updateProperty};
