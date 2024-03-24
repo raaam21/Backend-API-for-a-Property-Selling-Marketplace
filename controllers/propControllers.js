@@ -26,13 +26,21 @@ const addProperty = asyncHandler(async(req,res)=>{
     res.status(200).json({propModel});
 });
 
+// @desc Get all Properties
+// @route Get /
+// @access private
 
-
-const getProperty = asyncHandler(async(req,res)=>{
+const getAllProperty = asyncHandler(async(req,res)=>{
     console.log('All property');
     const properties = await pModel.find();
     res.status(200).json({properties});
-})
+});
+
+
+
+// @desc Delete Properties
+// @route Delete /:id
+// @access private
 
 const deleteProperty = asyncHandler(async(req,res)=>{
     
@@ -47,6 +55,10 @@ const deleteProperty = asyncHandler(async(req,res)=>{
 });
 
 
+// @desc Update Properties
+// @route Patch /:id
+// @access private
+
 const updateProperty = asyncHandler(async(req,res)=>{
     console.log('Updating property');
     const updatedProperty = await pModel.findByIdAndUpdate(
@@ -56,4 +68,39 @@ const updateProperty = asyncHandler(async(req,res)=>{
     );
     res.status(200).json(updatedProperty);
 });
-module.exports = {addProperty,getProperty,deleteProperty,updateProperty};
+
+// @desc Get Search Properties
+// @route Get /search
+// @access private
+
+const searchProperty = asyncHandler(async(req,res)=>{
+    const {location,noRooms,minPrice,maxPrice} = req.query;
+    var mnP=0;
+    var mxP=Infinity;
+    const filtersApplied = {};
+
+    if (location){
+        filtersApplied.location={$regex : location , $options :'i'};
+    }
+
+    if (noRooms){
+        filtersApplied.noRooms={$gte: parseFloat(noRooms)};
+    }
+
+    if (minPrice !== undefined && !isNaN(minPrice)) {
+        mnP = parseFloat(minPrice);
+    }
+    if (maxPrice !== undefined && !isNaN(maxPrice)){
+        mxP=parseFloat(maxPrice);
+    }
+
+    filtersApplied.cost = {$gte: mnP, $lte:mxP};
+
+    const property = await pModel.find(filtersApplied);
+    console.log('Search');
+    res.status(200).json({property});
+});
+
+
+
+module.exports = {searchProperty,addProperty,getAllProperty,deleteProperty,updateProperty};
