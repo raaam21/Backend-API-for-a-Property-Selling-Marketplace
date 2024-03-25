@@ -1,4 +1,6 @@
+
 const mongoose = require("mongoose");
+
 const propertyModel = mongoose.Schema({
     location:{
         type:String,
@@ -12,12 +14,14 @@ const propertyModel = mongoose.Schema({
         type:Number,
         required:[true,"Add Cost"]
     },
-    owner:{
-        type:String,
-        required:[true,"Add Owner"]
+    ownerID:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required:true
     },
     pStatus:{
         type:Boolean,
+        // true -> Available , False -> Sold Out
         required:[true,"Add Status"]
     },
 },{

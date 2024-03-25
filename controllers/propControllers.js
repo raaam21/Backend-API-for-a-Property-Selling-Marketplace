@@ -8,17 +8,17 @@ const pModel = require("../models/propertyModel.js");
 const addProperty = asyncHandler(async(req,res)=>{
     console.log('Adding property');
 
-    const {cost,owner,pStatus,noRooms,location} = req.body;
-    if (!cost || !owner || !pStatus || !noRooms || !location){
+    const {cost,pStatus,noRooms,location} = req.body;
+    if (!cost || !pStatus || !noRooms || !location){
         res.status(400);
         throw new Error('All Fields Req.');
     }
 
     const propModel = await pModel.create({
         cost,
-        owner,
         pStatus,
         noRooms,
+        ownerId:req.user_id,
         location
     });
 
