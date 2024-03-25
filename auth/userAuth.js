@@ -1,6 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt =require("jsonwebtoken");
+
+
+
+// const ACCESS_TOKEN_SECRET = "BRAMHARISHI202BACKENDPOW";
 
 const registerUser = asyncHandler(async(req,res)=>{
     const {username,password,email,phoneNo,role} = req.body;
@@ -35,7 +40,17 @@ const loginUser =  asyncHandler(async(req,res)=>{
     const user = await User.findOne({email});
 
     if (user && bcrypt.compare(password,user.password)){
-        res.status(200).json({message:"Login Done"});
+        const accessToekn = jwt.sign({
+            info:{
+                username:user.username,
+                email:user.email,
+                id:user.id,
+            },
+        },
+            process.env.ACCESS_TOKEN_SECRET,
+            {expiresIn:"30m"}
+        );
+        res.status(200).json({accessToekn});
     }else{
         res.status(400);
         throw new Error('Wrong Credentials');
