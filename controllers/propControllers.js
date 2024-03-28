@@ -26,13 +26,13 @@ const addProperty = asyncHandler(async(req,res)=>{
     res.status(200).json({propModel});
 });
 
-// @desc Get all Properties
+// @desc Get all Properties of Mine
 // @route Get /
 // @access private
 
 const getAllProperty = asyncHandler(async(req,res)=>{
     console.log('All property');
-    const properties = await pModel.find();
+    const properties = await pModel.find({ownerId:req.user.id});
     res.status(200).json({properties});
 });
 
