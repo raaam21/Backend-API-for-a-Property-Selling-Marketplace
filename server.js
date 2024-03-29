@@ -8,6 +8,10 @@ connectDb();
 
 app.use(express.json());
 
+app.get('/',(req,res)=>{
+    res.status(200).json("Property Backend System");
+});
+
 app.use('/api/properties',require("./routes/propRouter.js"));
 
 app.use('/api/user',require("./routes/userRouter.js"));
