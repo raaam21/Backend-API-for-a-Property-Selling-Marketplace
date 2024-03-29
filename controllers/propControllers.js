@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const pModel = require("../models/propertyModel.js");
+const { default: mongoose } = require("mongoose");
 
 // @desc Add new Properties
 // @route Post /add
@@ -14,12 +15,16 @@ const addProperty = asyncHandler(async(req,res)=>{
         throw new Error('All Fields Req.');
     }
 
+    
+    // const owner_ID = mongoose.Types.ObjectId.createFromHexString(req.user.user._id);
+    // console.log(typeof(owner_ID));
+    // console.log(req.user.user);
     const propModel = await pModel.create({
         cost,
         pStatus,
         noRooms,
-        ownerId:req.user_id,
-        location
+        ownerID:mongoose.Types.ObjectId.createFromHexString(req.user.user._id),
+        location,
     });
 
     console.log(propModel);
@@ -32,7 +37,7 @@ const addProperty = asyncHandler(async(req,res)=>{
 
 const getAllProperty = asyncHandler(async(req,res)=>{
     console.log('All property');
-    const properties = await pModel.find({ownerId:req.user.id});
+    const properties = await pModel.find({ownerId:req.user.user._id});
     res.status(200).json({properties});
 });
 
@@ -46,6 +51,9 @@ const deleteProperty = asyncHandler(async(req,res)=>{
     
     const property = await pModel.findById(req.params.id);
     // console.log(property);
+    if(property.ownerId.toString() !== req.user.user._id){
+        res.status(500).json({"message":"Unauthorized access"});
+    }
     if (!property){
         res.status(400).json({"message":"Property Not Found!"});
     }else{
@@ -61,6 +69,13 @@ const deleteProperty = asyncHandler(async(req,res)=>{
 
 const updateProperty = asyncHandler(async(req,res)=>{
     console.log('Updating property');
+
+    const property = await pModel.findById(req.params.id);
+    // console.log(property);
+    if(property.ownerId.toString() !== req.user.user._id){
+        res.status(500).json({"message":"Unauthorized access"});
+    };
+
     const updatedProperty = await pModel.findByIdAndUpdate(
         req.params.id,
         req.body,

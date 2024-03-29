@@ -13,11 +13,9 @@ const tokenValidate = asyncHandler(async(req,res,next)=>{
                 res.status(400);
                 throw new Error("User Not Authorized");
             }
-
             req.user = decoded_user;
             next();
-        });
-        
+        });  
     }
 });
 

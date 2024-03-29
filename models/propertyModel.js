@@ -16,8 +16,8 @@ const propertyModel = mongoose.Schema({
     },
     ownerID:{
         type : mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required:true
+        required:true,
+        ref: "User"
     },
     pStatus:{
         type:Boolean,

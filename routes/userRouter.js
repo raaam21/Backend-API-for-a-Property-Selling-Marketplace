@@ -1,13 +1,19 @@
 const express=require("express");
 const router = express.Router();
 
-const {registerUser,allUser,loginUser} = require('../auth/userAuth');
+const {registerUser,loginUser} = require('../auth/userAuth');
+const { tokenValidate } = require("../middlewares/tokenHandler");
+const {allUser ,buyProperty} = require("../controllers/userControllers");
 
-router.route('/signUp').post(registerUser);
 
-router.route('/').get(allUser);
+router.post('/signUp',registerUser);
 
-router.route('/login').get(loginUser);
+router.get('/login',loginUser);
+
+router.get('/',tokenValidate,allUser);
+
+router.get('/buy',tokenValidate,buyProperty);
+
 
 
 module.exports = router;

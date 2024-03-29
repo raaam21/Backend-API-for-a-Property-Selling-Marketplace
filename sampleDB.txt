@@ -1,0 +1,47 @@
+[
+  {
+    "username": "John Doe",
+    "password": "password123",
+    "email": "john@example.com",
+    "role": true,
+    "phone": "1234567890"
+  },
+  {
+    "username": "Alice Smith",
+    "password": "alicePassword",
+    "email": "alice@example.com",
+    "role": true,
+    "phone": "9876543210"
+  },
+  {
+    "username": "Bob Johnson",
+    "password": "bob123",
+    "email": "bob@example.com",
+    "role": true,
+    "phone": "5555555555"
+  }
+]
+[
+    {
+      "username": "Priya Patel",
+      "password": "priya@123",
+      "email": "priya@example.com",
+      "role": true,
+      "phone": "9876543210"
+    },
+    {
+      "username": "Rahul Sharma",
+      "password": "rahul@456",
+      "email": "rahul@example.com",
+      "role": true,
+      "phone": "8765432109"
+    },
+    {
+      "username": "Amit Singh",
+      "password": "amit@789",
+      "email": "amit@example.com",
+      "role": true,
+      "phone": "7654321098"
+    }
+  ]
+  

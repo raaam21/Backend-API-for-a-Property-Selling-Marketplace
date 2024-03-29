@@ -9,7 +9,7 @@ const jwt =require("jsonwebtoken");
 
 const registerUser = asyncHandler(async(req,res)=>{
     const {username,password,email,phoneNo,role} = req.body;
-
+    // console.log(req);
     if (!username || !password || !email || !role){
         res.status(400);
         throw new Error('All Fields Required');
@@ -40,27 +40,20 @@ const loginUser =  asyncHandler(async(req,res)=>{
     const user = await User.findOne({email});
 
     if (user && bcrypt.compare(password,user.password)){
-        const accessToekn = jwt.sign({
-            info:{
-                username:user.username,
+        const accessToken = jwt.sign({
+            user:{
                 email:user.email,
-                id:user.id,
+                _id:user._id,
             },
         },
             process.env.ACCESS_TOKEN_SECRET,
-            {expiresIn:"30m"}
+            {expiresIn:"1h"}
         );
-        res.status(200).json({accessToekn});
+        res.status(200).json({accessToken});
     }else{
         res.status(400);
         throw new Error('Wrong Credentials');
     }
 });
 
-
-const allUser = asyncHandler(async(req,res)=>{
-    const users = await User.find();
-    res.status(200).json(users);
-});
-
-module.exports = {registerUser,allUser,loginUser};
+module.exports = {registerUser,loginUser};

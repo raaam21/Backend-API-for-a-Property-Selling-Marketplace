@@ -7,6 +7,9 @@ const {addProperty,
     deleteProperty,
     updateProperty} = require("../controllers/propControllers");
 
+const { tokenValidate } = require("../middlewares/tokenHandler");
+
+router.use(tokenValidate);
 router.route('/add').post(addProperty);
 router.route('/').get(getAllProperty);
 router.route('/search').get(searchProperty);
