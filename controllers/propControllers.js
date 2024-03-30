@@ -37,7 +37,7 @@ const addProperty = asyncHandler(async(req,res)=>{
 
 const getAllProperty = asyncHandler(async(req,res)=>{
     console.log('All property');
-    const properties = await pModel.find({ownerId:req.user.user._id});
+    const properties = await pModel.find({ownerID:req.user.user._id});
     res.status(200).json({properties});
 });
 
@@ -50,15 +50,17 @@ const getAllProperty = asyncHandler(async(req,res)=>{
 const deleteProperty = asyncHandler(async(req,res)=>{
     
     const property = await pModel.findById(req.params.id);
-    // console.log(property);
-    if(property.ownerId.toString() !== req.user.user._id){
-        res.status(500).json({"message":"Unauthorized access"});
-    }
+    console.log(property);
     if (!property){
         res.status(400).json({"message":"Property Not Found!"});
-    }else{
+    }
+    if(property.ownerID != req.user.user._id){
+        res.status(500).json({"message":"Unauthorized access"});
+    }
+    else{
     await pModel.deleteOne({_id:req.params.id});
     res.status(200).json({"message":"Contact Deleted!"});
+    res.status(200);
     } 
 });
 
@@ -69,11 +71,11 @@ const deleteProperty = asyncHandler(async(req,res)=>{
 
 const updateProperty = asyncHandler(async(req,res)=>{
     console.log('Updating property');
-
     const property = await pModel.findById(req.params.id);
-    // console.log(property);
-    if(property.ownerId.toString() !== req.user.user._id){
-        res.status(500).json({"message":"Unauthorized access"});
+    console.log(property);
+    if(property.ownerID != req.user.user._id){
+        res.status(500);
+        throw new Error("Unauthorized Access");
     };
 
     const updatedProperty = await pModel.findByIdAndUpdate(
