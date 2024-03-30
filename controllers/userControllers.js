@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
-const Property = require("../models/propertyModel");
+const pModel = require("../models/propertyModel");
+
+
 
 const allUser = asyncHandler(async(req,res)=>{
     const users = await User.find();
@@ -9,36 +11,33 @@ const allUser = asyncHandler(async(req,res)=>{
 
 
 const buyProperty = asyncHandler(async(req,res)=>{
-    const {sellerId,propertyId}= req.body;
-    const buyerId =  req.user.user._id;
-    if(buyerId == sellerId){
-        res.status(400)
+    const {buyerId}= req.body;
+    const propertyId = req.params.id;
+
+    const property = await pModel.findById(propertyId);
+
+    if(!property){
+        res.status(400);
+        throw new Error("Property Does not Exist !");
+    }
+
+    if(property.ownerID != req.user.user._id){
+        res.status(400);
+        throw new Error("Unauthorized Attempt!");
+    }
+
+    if(property.ownerID == buyerId){
+        res.status(400);
         throw new Error("Invalid Transaction");
     }
 
-    if(!propertyId || !sellerId){
-        res.status(400);
-        throw new Error("Not Enough Details!");
-    }
-
-    const property = await Property.find(propertyId);
-    if(!property){
-        res.status(400).json({message:"Property Does not Exist!"});
-    }
-
-    if(property.ownerID.toString() !== sellerId){
-        res.status(400);
-        throw new Error("Unauthorized Attempt");
-    } 
-
-    console.log(property);
-    const updatedProperty = await pModel.findByIdAndUpdate(
+    const updatedProp = await pModel.findByIdAndUpdate(
         req.params.id,
-        buyerId,
+        {ownerID:req.body.buyerId},
         {new:true}
     );
-    console.log(updatedProperty);
-
+    
+    res.status(200).json(updatedProp);
 });
 
 
