@@ -59,7 +59,7 @@ const deleteProperty = asyncHandler(async(req,res)=>{
     }
     else{
     await pModel.deleteOne({_id:req.params.id});
-    res.status(200).json({"message":"Contact Deleted!"});
+    res.status(200).json({"message":"Property Deleted!"});
     res.status(200);
     } 
 });
