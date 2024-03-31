@@ -20,6 +20,17 @@ const buyProperty = asyncHandler(async(req,res)=>{
         res.status(400);
         throw new Error("Property Does not Exist !");
     }
+    if(!property.buyer){
+        res.status(400);
+        throw new Error("User is not registered as Buyer!");
+    }
+
+
+    if(!property.buyer){
+        res.status(400);
+        throw new Error("User is not registered as Buyer!");
+    }
+
 
     if(property.ownerID != req.user.user._id){
         res.status(400);
